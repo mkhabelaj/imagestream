@@ -1,4 +1,5 @@
-import socket, select
+import select
+import socket
 from struct import unpack
 
 
@@ -11,6 +12,7 @@ class SocketServer:
                  port=5000,
                  address='0.0.0.0'
                  ):
+        print('setting up socket server. address: {address}, port: {port}'.format(address=address,port=port))
         self.connection_list = []  # list of client connections
         self.recv_buffer = recv_buffer  # keep it as an exponent of 2
         self.port = port
@@ -24,7 +26,7 @@ class SocketServer:
         self.connection_list.append(self.server_socket)
 
     def initiate_server(self):
-        print("Chat server started on port ", self.port)
+        print("initiating stream server")
 
         while 1:
             # Get the list of sockets that are ready to be read from
@@ -50,7 +52,6 @@ class SocketServer:
                             yield data
                     except Exception as ex:
                         print(ex)
-                        # broadcast_data(sock, "Client (%s, %s) is offline" % addr)
                         print("Client (%s, %s) is offline" % addr)
                         sock.close()
                         self.connection_list.remove(sock)
@@ -61,4 +62,5 @@ class SocketServer:
 
     def bytes_to_str(self, data_to_convert):
         return str(data_to_convert, 'utf-8')
+
 
